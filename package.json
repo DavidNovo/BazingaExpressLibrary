@@ -25,6 +25,7 @@
         "pug": "2.0.0-beta11"
     },
     "devDependencies": {
+        "eslint-config-google": "^0.9.1",
         "nodemon": "^1.17.3"
     }
 }
