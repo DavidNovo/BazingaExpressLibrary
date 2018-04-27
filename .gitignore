@@ -61,4 +61,4 @@ typings/
 .next
 
 # removing IntelliJ dependent files
-.idea/*
+.idea
