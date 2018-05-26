@@ -17,21 +17,23 @@
     "author": "David Novogrodsky",
     "license": "MIT",
     "dependencies": {
-        "async": "^2.6.0",
+        "async": "^2.6.1",
         "bootstrap": "^4.1.1",
         "cookie-parser": "~1.4.3",
         "debug": "~2.6.9",
         "express": "~4.16.0",
         "http-errors": "~1.6.2",
         "jquery": "^3.3.1",
-        "mongoose": "^5.1.0",
+        "moment": "^2.22.1",
+        "mongoose": "^5.1.2",
         "morgan": "~1.9.0",
         "popper.js": "^1.14.3",
-        "pug": "2.0.0-beta11"
+        "pug": "2.0.0-beta11",
+        "save": "^2.3.2"
     },
     "devDependencies": {
         "eslint-config-google": "^0.9.1",
-        "nodemon": "^1.17.3",
+        "nodemon": "^1.17.5",
         "standard": "^11.0.1"
     }
 }

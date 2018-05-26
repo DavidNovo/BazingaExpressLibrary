@@ -13,6 +13,8 @@ var BookSchema = new Schema(
 )
 
 // Virtual for book's URL
+// This makes a function associated with a book instance
+// Called like this Book.url
 BookSchema
 .virtual('url')
 .get(function () {

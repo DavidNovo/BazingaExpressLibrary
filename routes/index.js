@@ -3,7 +3,7 @@ var router = express.Router()
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Bazinga Express Library' })
+  res.render('home', { title: 'Bazinga Express Library' })
 })
 
 module.exports = router

@@ -25,6 +25,7 @@ db.on('error', console.error.bind(console , 'MongoDB connection error'));
 
 
 // view engine setup and add to application object
+// sets the template engine and where the templates are located
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
