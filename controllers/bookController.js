@@ -1,7 +1,13 @@
+// This module  defining functions as variables.
+// These are function expressions.
+// Function Expressions are not subject to hoisting.
+
+// Defining callback function used by routes
+
 var Book = require('../models/book');
 
 exports.index = function(req, res) {
-  res.send('NOT IMPLEMENTED: Catalog Page');
+  res.send('NOT IMPLEMENTED: Catalog Page Index');
 };
 
 // Display list of all books.

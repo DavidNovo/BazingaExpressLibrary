@@ -7,7 +7,7 @@ var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 
-// Define elements of the middleware chain
+// Define routes
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var catalogRouter = require('./routes/catalog')
@@ -35,8 +35,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-// Add elements of middleware chain to the
-// application object
+// Add routes to the middleware stack
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/catalog', catalogRouter)
