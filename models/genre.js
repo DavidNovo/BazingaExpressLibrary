@@ -9,12 +9,9 @@ var GenreSchema = new Schema(
 )
 
 // virtual for the genre's URL
-// without the leading '/' the returned path is considered relative
-// by Express
 GenreSchema.virtual('url').get(function () {
   return '/catalog/genre/' + this._id
 })
 
 //Export model
 module.exports = mongoose.model('Genre', GenreSchema)
-e
