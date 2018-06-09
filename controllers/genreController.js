@@ -55,7 +55,7 @@ exports.genre_create_get = function (req, res) {
 }
 
 // Handle Genre create on POST.
-// Making an array of function in a function
+// Making an array of function in a function - each method is called in order
 exports.genre_create_post = [
   // 1st function Validate that the name field is not empty.
   body('name', 'Genre name required').isLength({min: 1}).trim(),
