@@ -4,18 +4,18 @@
 
 // Defining callback function used by routes
 
-//// defining the database models that are used by this controller
-var Book = require('../models/book');
-var Author = require('../models/author');
-var Genre = require('../models/genre');
-var BookInstance = require('../models/bookinstance');
+/// / defining the database models that are used by this controller
+let Book = require('../models/book');
+let Author = require('../models/author');
+let Genre = require('../models/genre');
+let BookInstance = require('../models/bookinstance');
 
-//// import validation and sanitisation methods
+/// / import validation and sanitisation methods
 const {body, validationResult} = require('express-validator/check');
 const {sanitizeBody} = require('express-validator/filter');
 
 // need the async module for communication
-var async = require('async');
+let async = require('async');
 
 // This is the index for the catalog...better name?
 // TODO: make a better name for this page, index is not good
@@ -23,7 +23,7 @@ exports.index = function (req, res) {
   async.parallel({
     book_count: function (callback) {
       Book.count({}, callback);
-      //Pass an empty object to find all doucments
+      // Pass an empty object to find all doucments
     },
     book_instance_count: function (callback) {
       BookInstance.count({}, callback);
@@ -36,7 +36,7 @@ exports.index = function (req, res) {
     },
     genre_count: function (callback) {
       Genre.count({}, callback);
-    },
+    }
   }, function (err, results) { // this is the callback function
     res.render('index',
       {title: 'Local Library Home', error: err, data: results});
@@ -45,11 +45,11 @@ exports.index = function (req, res) {
 
 // Display list of all books.
 exports.book_list = function (req, res) {
-  Book.find({}, 'title author').
-    populate('author').
-    exec(function (err, list_books) {
+  Book.find({}, 'title author')
+    .populate('author')
+    .exec(function (err, list_books) {
       if (err) { return next(err); }
-      //Successful, so render
+      // Successful, so render
       res.render('book_list', {title: 'Book List', book_list: list_books});
     });
 };
@@ -58,16 +58,14 @@ exports.book_list = function (req, res) {
 exports.book_detail = function (req, res) {
   async.parallel({
     book: function (callback) {
-
-      Book.findById(req.params.id).
-        populate('author').
-        populate('genre').
-        exec(callback);
+      Book.findById(req.params.id)
+        .populate('author')
+        .populate('genre')
+        .exec(callback);
     },
     book_instance: function (callback) {
-
       BookInstance.find({'book': req.params.id}).exec(callback);
-    },
+    }
   }, function (err, results) {
     if (err) { return next(err); }
     if (results.book == null) { // No results.
@@ -79,7 +77,7 @@ exports.book_detail = function (req, res) {
     res.render('book_detail', {
       title: 'Title',
       book: results.book,
-      book_instances: results.book_instance,
+      book_instances: results.book_instance
     });
   });
 };
@@ -93,7 +91,7 @@ exports.book_create_get = function (req, res, next) {
     },
     genres: function (callback) {
       Genre.find(callback);
-    },
+    }
   }, function (err, results) {
     if (err) {
       return next(err);
@@ -102,7 +100,8 @@ exports.book_create_get = function (req, res, next) {
     // render the book_form page with all results and errors
     res.render('book_form', {
       title: 'Create Book',
-      authors: results.authors, genres: results.genres,
+      authors: results.authors,
+      genres: results.genres
     });
   });
 };
@@ -111,7 +110,7 @@ exports.book_create_get = function (req, res, next) {
 exports.book_create_post = [
   // convert the genre to an array
   (req, res, next) => {
-    if ((!req.body.genre instanceof Array)) {
+    if ((!(req.body.genre instanceof Array))) {
       if (typeof req.body.genre === 'undefined') {
         req.body.genre = [];
       } else {
@@ -133,55 +132,57 @@ exports.book_create_post = [
 
   // process the request
   (req, res, next) => {
-    //// extract validation errors from the request
+    /// / extract validation errors from the request
     const errors = validationResult(req);
 
-    //// create a book object with escaped and trimmed data
-    var book = new Book(
+    /// / create a book object with escaped and trimmed data
+    let book = new Book(
       {
         title: req.body.title,
         author: req.body.author,
         summary: req.body.summary,
         isbn: req.body.isbn,
-        genre: req.body.genre,
-      },
+        genre: req.body.genre
+      }
     );
     if (!errors.isEmpty()) {
-      //// If there are errors. render form again with santized values/error messages
-      //// get all authors and genres from the form
+      /// If there are errors. render form again with santized
+      // values/error messages get all authors and genres from the form
       async.parallel({
-          authors: function (callback) {
-            Author.find(callback);
-          },
-          genres: function (callback) {
-            Genre.find(callback);
-          },
-        }, function (err, results) {
-          //// mark our selected genres as checked
-          for (let dropdownIndex = 0; dropdownIndex < results.genres.length;
-               dropdownIndex++) {
-            if (bood.genre.indexOf(results.genres[dropdownIndex]._id) > -1) {
-              results.genres[dropdownIndex].checked = 'true';
-            }
-          }
-          res.render('book_form', {
-            title: 'Create Book', authors: results.authors,
-            genres: results.genres, book: book, errors: errors.array(),
-          });
-          return;
+        authors: function (callback) {
+          Author.find(callback);
         },
+        genres: function (callback) {
+          Genre.find(callback);
+        }
+      }, function (err, results) {
+        /// / mark our selected genres as checked
+        for (let dropdownIndex = 0; dropdownIndex < results.genres.length;
+          dropdownIndex++) {
+          if (bood.genre.indexOf(results.genres[dropdownIndex]._id) > -1) {
+            results.genres[dropdownIndex].checked = 'true';
+          }
+        }
+        res.render('book_form', {
+          title: 'Create Book',
+          authors: results.authors,
+          genres: results.genres,
+          book: book,
+          errors: errors.array()
+        });
+      }
       );
     } else {
-      //// data from form is valid, save book
+      /// / data from form is valid, save book
       book.save(function (err) {
         if (err) {
           return next(err);
         }
-        //// if save is successful, redirect used to new book form
+        /// / if save is successful, redirect used to new book form
         res.redirect(book.url);
       });
     }
-  },// end of process the request
+  }// end of process the request
 ];
 
 // Display book delete form on GET.
