@@ -4,70 +4,89 @@
 
 // Defining callback function used by routes
 
-/// / defining the database models that are used by this controller
+// / / defining the database models that are used by this controller
 let Book = require('../models/book');
 let Author = require('../models/author');
 let Genre = require('../models/genre');
 let BookInstance = require('../models/bookinstance');
 
-/// / import validation and sanitisation methods
-const {body, validationResult} = require('express-validator/check');
-const {sanitizeBody} = require('express-validator/filter');
+// / / import validation and sanitisation methods
+const {
+  body,
+  validationResult
+} = require('express-validator/check');
+const {
+  sanitizeBody
+} = require('express-validator/filter');
 
 // need the async module for communication
 let async = require('async');
 
 // This is the index for the catalog...better name?
 // TODO: make a better name for this page, index is not good
-exports.index = function (req, res) {
+exports.index = function(req, res) {
   async.parallel({
-    book_count: function (callback) {
+    book_count: function(callback) {
       Book.count({}, callback);
       // Pass an empty object to find all doucments
     },
-    book_instance_count: function (callback) {
+    book_instance_count: function(callback) {
       BookInstance.count({}, callback);
     },
-    book_instance_available_count: function (callback) {
-      BookInstance.count({status: 'Available'}, callback);
+    book_instance_available_count: function(callback) {
+      BookInstance.count({
+        status: 'Available'
+      }, callback);
     },
-    author_count: function (callback) {
+    author_count: function(callback) {
       Author.count({}, callback);
     },
-    genre_count: function (callback) {
+    genre_count: function(callback) {
       Genre.count({}, callback);
     }
-  }, function (err, results) { // this is the callback function
-    res.render('index',
-      {title: 'Local Library Home', error: err, data: results});
+  }, function(err, results) { // this is the callback function
+    res.render('index', {
+      title: 'Local Library Home',
+      error: err,
+      data: results
+    });
   });
 };
 
 // Display list of all books.
-exports.book_list = function (req, res) {
+exports.book_list = function(req, res) {
   Book.find({}, 'title author')
     .populate('author')
-    .exec(function (err, list_books) {
-      if (err) { return next(err); }
+    .exec(function(err, list_books) {
+      if (err) {
+        return next(err);
+      }
       // Successful, so render
-      res.render('book_list', {title: 'Book List', book_list: list_books});
+      res.render('book_list', {
+        title: 'Book List',
+        book_list: list_books
+      });
     });
 };
 
 // Display detail page for a specific book.
-exports.book_detail = function (req, res) {
+exports.book_detail = function(req, res) {
   async.parallel({
-    book: function (callback) {
+    book: function(callback) {
       Book.findById(req.params.id)
         .populate('author')
         .populate('genre')
         .exec(callback);
     },
-    book_instance: function (callback) {
-      BookInstance.find({'book': req.params.id}).exec(callback);
+    book_instance: function(callback) {
+      BookInstance.find({
+        'book': req.params.id
+      }).exec(callback);
     }
-  }, function (err, results) {
-    if (err) { return next(err); }
+  }, function(err, results) {
+    if (err) {
+      return next(err);
+    }
     if (results.book == null) { // No results.
       var err = new Error('Book not found');
       err.status = 404;
@@ -83,16 +102,16 @@ exports.book_detail = function (req, res) {
 };
 
 // Display book create form on GET.
-exports.book_create_get = function (req, res, next) {
+exports.book_create_get = function(req, res, next) {
   // get all authors and genres that we can add to a book
   async.parallel({
-    authors: function (callback) {
+    authors: function(callback) {
       Author.find(callback);
     },
-    genres: function (callback) {
+    genres: function(callback) {
       Genre.find(callback);
     }
-  }, function (err, results) {
+  }, function(err, results) {
     if (err) {
       return next(err);
     }
@@ -120,10 +139,18 @@ exports.book_create_post = [
     next();
   },
   // validate the fields of the form
-  body('title', 'Title must not be empty.').isLength({min: 1}).trim(),
-  body('author', 'Author must not be empty.').isLength({min: 1}).trim(),
-  body('summary', 'Summary must not be empty.').isLength({min: 1}).trim(),
-  body('isbn', 'ISBN must not be empty.').isLength({min: 1}).trim(),
+  body('title', 'Title must not be empty.').isLength({
+    min: 1
+  }).trim(),
+  body('author', 'Author must not be empty.').isLength({
+    min: 1
+  }).trim(),
+  body('summary', 'Summary must not be empty.').isLength({
+    min: 1
+  }).trim(),
+  body('isbn', 'ISBN must not be empty.').isLength({
+    min: 1
+  }).trim(),
 
   // sanitize all fields in form with wildcard
   sanitizeBody('*').trim().escape(),
@@ -132,33 +159,30 @@ exports.book_create_post = [
 
   // process the request
   (req, res, next) => {
-    /// / extract validation errors from the request
+    // / / extract validation errors from the request
     const errors = validationResult(req);
 
-    /// / create a book object with escaped and trimmed data
-    let book = new Book(
-      {
-        title: req.body.title,
-        author: req.body.author,
-        summary: req.body.summary,
-        isbn: req.body.isbn,
-        genre: req.body.genre
-      }
-    );
+    // / / create a book object with escaped and trimmed data
+    let book = new Book({
+      title: req.body.title,
+      author: req.body.author,
+      summary: req.body.summary,
+      isbn: req.body.isbn,
+      genre: req.body.genre
+    });
     if (!errors.isEmpty()) {
-      /// If there are errors. render form again with santized
+      // / If there are errors. render form again with santized
       // values/error messages get all authors and genres from the form
       async.parallel({
-        authors: function (callback) {
+        authors: function(callback) {
           Author.find(callback);
         },
-        genres: function (callback) {
+        genres: function(callback) {
           Genre.find(callback);
         }
-      }, function (err, results) {
-        /// / mark our selected genres as checked
-        for (let dropdownIndex = 0; dropdownIndex < results.genres.length;
-          dropdownIndex++) {
+      }, function(err, results) {
+        // / / mark our selected genres as checked
+        for (let dropdownIndex = 0; dropdownIndex < results.genres.length; dropdownIndex++) {
           if (bood.genre.indexOf(results.genres[dropdownIndex]._id) > -1) {
             results.genres[dropdownIndex].checked = 'true';
           }
@@ -170,37 +194,38 @@ exports.book_create_post = [
           book: book,
           errors: errors.array()
         });
-      }
-      );
+      });
     } else {
-      /// / data from form is valid, save book
-      book.save(function (err) {
+      // / / data from form is valid, save book
+      book.save(function(err) {
         if (err) {
           return next(err);
         }
-        /// / if save is successful, redirect used to new book form
+        // / / if save is successful, redirect used to new book form
         res.redirect(book.url);
       });
     }
-  }// end of process the request
+  } // end of process the request
 ];
 
 // Display book delete form on GET.
-exports.book_delete_get = function (req, res) {
+exports.book_delete_get = function(req, res) {
   res.send('NOT IMPLEMENTED: Book delete GET');
 };
 
 // Handle book delete on POST.
-exports.book_delete_post = function (req, res) {
+exports.book_delete_post = function(req, res) {
   res.send('NOT IMPLEMENTED: Book delete POST');
 };
 
 // Display book update form on GET.
-exports.book_update_get = function (req, res) {
+exports.book_update_get = function(req, res, next) {
+  // Get book, author, and genres for the form.
+  async.parallel();
   res.send('NOT IMPLEMENTED: Book update GET');
 };
 
 // Handle book update on POST.
-exports.book_update_post = function (req, res) {
+exports.book_update_post = function(req, res) {
   res.send('NOT IMPLEMENTED: Book update POST');
 };
