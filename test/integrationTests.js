@@ -1,6 +1,5 @@
 const it = require('mocha').it;
 const describe = require('mocha').describe;
-let assert = require('assert');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');

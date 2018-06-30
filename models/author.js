@@ -1,5 +1,5 @@
-var mongoose = require('mongoose')
-var moment = require('moment')
+var mongoose = require('mongoose');
+var moment = require('moment');
 
 var Schema = mongoose.Schema;
 
@@ -19,8 +19,8 @@ var AuthorSchema = new Schema({
   },
   date_of_death: {
     type: Date
-  },
-})
+  }
+});
 
 // next define some virtual properties of author
 // these get and set properties are not persisted to the database
@@ -28,13 +28,13 @@ var AuthorSchema = new Schema({
 
 // virtual for author's full name
 AuthorSchema.virtual('name').get(function () {
-  return this.family_name + ',' + this.first_name
-})
+  return this.family_name + ',' + this.first_name;
+});
 
 // virtual for author's URL
 AuthorSchema.virtual('url').get(function () {
-  return '/catalog/author/' + this._id
-})
+  return '/catalog/author/' + this._id;
+});
 
 AuthorSchema
   .virtual('date_of_birth_formatted')

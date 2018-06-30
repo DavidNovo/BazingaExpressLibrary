@@ -264,10 +264,11 @@ exports.book_update_post = [
   // Convert the genre to an array
   (req, res, next) => {
     if (!(req.body.genre instanceof Array)) {
-      if (typeof req.body.genre === 'undefined')
-        {req.body.genre = [];}
-      else
-        {req.body.genre = new Array(req.body.genre);}
+      if (typeof req.body.genre === 'undefined') {
+        req.body.genre = [];
+      } else {
+        req.body.genre = new Array(req.body.genre);
+      }
     }
     next();
   },
@@ -306,7 +307,7 @@ exports.book_update_post = [
       summary: req.body.summary,
       isbn: req.body.isbn,
       genre: (typeof req.body.genre === 'undefined') ? [] : req.body.genre,
-      _id: req.params.id //This is required, or a new ID will be assigned!
+      _id: req.params.id // This is required, or a new ID will be assigned!
     });
 
     if (!errors.isEmpty()) {
@@ -339,7 +340,7 @@ exports.book_update_post = [
           errors: errors.array()
         });
       });
-      
+
     } else {
       // Data from form is valid. Update the record.
       Book.findByIdAndUpdate(req.params.id, book, {}, function (err, thebook) {

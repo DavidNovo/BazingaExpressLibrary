@@ -48,11 +48,11 @@ exports.author_detail = function (req, res) {
     },
     authors_books: function (callback) {
       Book.find({
-          'author': req.params.id
-        }, 'title summary')
+        'author': req.params.id
+      }, 'title summary')
         .exec(callback);
     }
-  }, function (err, results) {
+  }, function (err, results, next) {
     if (err) {
       return next(err);
     } // Error in API usage.
@@ -86,11 +86,11 @@ exports.author_create_post = [
   body('first_name').isLength({
     min: 1
   }).trim().withMessage('First name must be specified.')
-  .isAlphanumeric().withMessage('First name has non-alphamumeric characters.'),
+    .isAlphanumeric().withMessage('First name has non-alphamumeric characters.'),
   body('family_name').isLength({
     min: 1
   }).trim().withMessage('Family name must be specified')
-  .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+    .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
 
   // the option() used to run  the next validation only
   // if a field has been entered
@@ -118,7 +118,6 @@ exports.author_create_post = [
         author: req.body,
         errors: validation_errors.array()
       });
-      return;
     } else {
       // data from form is valid
       // 2nd save new author data
@@ -143,31 +142,31 @@ exports.author_create_post = [
 exports.author_delete_get = function (req, res, next) {
   // get author record and all associated books in parallel
   async.parallel({
-      author: function (callback) {
-        // using the id from the req to get the author
-        Author.findById(req.params.id).exec(callback);
-      },
-      authors_books: function (callback) {
-        Book.find({
-          'author': req.params.id
-        }).exec(callback);
-      }
+    author: function (callback) {
+      // using the id from the req to get the author
+      Author.findById(req.params.id).exec(callback);
     },
+    authors_books: function (callback) {
+      Book.find({
+        'author': req.params.id
+      }).exec(callback);
+    }
+  },
     // this is the callback function
-    function (err, results) {
-      if (err) {
-        return next(err);
-      }
-      if (results.author == null) { // if no author list all authors
-        res.redirect('/catalog/authors');
-      }
-      // happy path, author and author's books found
-      res.render('author_delete', {
-        title: 'Delete Author',
-        author: results.author,
-        author_books: results.authors_books
-      });
-    }); // close parallel processing
+  function (err, results) {
+    if (err) {
+      return next(err);
+    }
+    if (results.author == null) { // if no author list all authors
+      res.redirect('/catalog/authors');
+    }
+    // happy path, author and author's books found
+    res.render('author_delete', {
+      title: 'Delete Author',
+      author: results.author,
+      author_books: results.authors_books
+    });
+  }); // close parallel processing
 };
 
 // Handle Author delete on POST.
@@ -194,10 +193,9 @@ exports.author_delete_post = function (req, res, next) {
         author: results.author,
         author_books: results.authors_books
       });
-      return;
     } else {
       // author has no books, delete author
-      Author.findByIdAndRemove(req.body.authorid, function deleteAuthor(err) {
+      Author.findByIdAndRemove(req.body.authorid, function deleteAuthor (err) {
         if (err) {
           return next(err);
         }

@@ -25,7 +25,7 @@ exports.genre_detail = function (req, res) {
 
     genre_books: function (callback) {
       Book.find({'genre': req.params.id}).exec(callback);
-    },
+    }
 
   }, function (err, results, next) {
     if (err) {
@@ -40,7 +40,7 @@ exports.genre_detail = function (req, res) {
     res.render('genre_detail', {
       title: 'Genre Detail',
       genre: results.genre,
-      genre_books: results.genre_books,
+      genre_books: results.genre_books
     });
   });
 };
@@ -66,7 +66,7 @@ exports.genre_create_post = [
 
     // Create a genre object with escaped and trimmed data.
     var genre = new Genre(
-      {name: req.body.name},
+      {name: req.body.name}
     );
 
     if (!errors.isEmpty()) {
@@ -95,7 +95,7 @@ exports.genre_create_post = [
         }
       });
     }
-  },
+  }
 ];
 
 // Display Genre delete form on GET.

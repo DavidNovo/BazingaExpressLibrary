@@ -27,8 +27,8 @@ exports.bookinstance_list = function (req, res, next) {
 // Display detail page for a specific BookInstance.
 exports.bookinstance_detail = function (req, res, next) {
   BookInstance.findById(req.params.id)
-  .populate('book')
-  .exec(function (err, bookinstance) {
+    .populate('book')
+    .exec(function (err, bookinstance) {
       if (err) {
         return next(err);
       }
@@ -110,10 +110,9 @@ exports.bookinstance_create_post = [
           book_list: books,
           selected_book: bookinstance.book._id,
           errors: errors.array(),
-          bookinstance: bookinstance,
+          bookinstance: bookinstance
         });
       });
-      
     }
   }
 ]; // end of bookinstance_create_post
