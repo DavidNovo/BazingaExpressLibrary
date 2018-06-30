@@ -180,7 +180,7 @@ exports.book_create_post = [
         genres: function (callback) {
           Genre.find(callback);
         }
-      }, function (err, results) {
+      }, function (results) {
         // / / mark our selected genres as checked
         for (let dropdownIndex = 0; dropdownIndex < results.genres.length; dropdownIndex++) {
           if (bood.genre.indexOf(results.genres[dropdownIndex]._id) > -1) {
@@ -196,34 +196,30 @@ exports.book_create_post = [
         });
       });
     } else {
-      // / / data from form is valid, save book
+      // // data from form is valid, save book
       book.save(function (err) {
         if (err) {
           return next(err);
         }
-        // / / if save is successful, redirect used to new book form
+        // // if save is successful, redirect used to new book form
         res.redirect(book.url);
       });
     }
   } // end of process the request
 ];
 
-
 // Display book delete form on GET.
 exports.book_delete_get = function (req, res) {
   res.send('NOT IMPLEMENTED: Book delete GET');
 };
-
 
 // Handle book delete on POST.
 exports.book_delete_post = function (req, res) {
   res.send('NOT IMPLEMENTED: Book delete POST');
 };
 
-
 // Display book update form on GET.
 exports.book_update_get = function (req, res, next) {
-
   // Get book, authors and genres for form.
   async.parallel({
     book: function (callback) {
@@ -234,7 +230,7 @@ exports.book_update_get = function (req, res, next) {
     },
     genres: function (callback) {
       Genre.find(callback);
-    },
+    }
   }, function (err, results) {
     if (err) {
       return next(err);
@@ -260,7 +256,6 @@ exports.book_update_get = function (req, res, next) {
       book: results.book
     });
   });
-
 };
 
 // Handle book update on POST.
@@ -270,9 +265,9 @@ exports.book_update_post = [
   (req, res, next) => {
     if (!(req.body.genre instanceof Array)) {
       if (typeof req.body.genre === 'undefined')
-        req.body.genre = [];
+        {req.body.genre = [];}
       else
-        req.body.genre = new Array(req.body.genre);
+        {req.body.genre = new Array(req.body.genre);}
     }
     next();
   },
@@ -344,7 +339,7 @@ exports.book_update_post = [
           errors: errors.array()
         });
       });
-      return;
+      
     } else {
       // Data from form is valid. Update the record.
       Book.findByIdAndUpdate(req.params.id, book, {}, function (err, thebook) {
