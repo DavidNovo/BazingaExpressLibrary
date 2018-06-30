@@ -24,27 +24,27 @@ let async = require('async');
 
 // This is the index for the catalog...better name?
 // TODO: make a better name for this page, index is not good
-exports.index = function(req, res) {
+exports.index = function (req, res) {
   async.parallel({
-    book_count: function(callback) {
+    book_count: function (callback) {
       Book.count({}, callback);
       // Pass an empty object to find all doucments
     },
-    book_instance_count: function(callback) {
+    book_instance_count: function (callback) {
       BookInstance.count({}, callback);
     },
-    book_instance_available_count: function(callback) {
+    book_instance_available_count: function (callback) {
       BookInstance.count({
         status: 'Available'
       }, callback);
     },
-    author_count: function(callback) {
+    author_count: function (callback) {
       Author.count({}, callback);
     },
-    genre_count: function(callback) {
+    genre_count: function (callback) {
       Genre.count({}, callback);
     }
-  }, function(err, results) { // this is the callback function
+  }, function (err, results) { // this is the callback function
     res.render('index', {
       title: 'Local Library Home',
       error: err,
@@ -54,10 +54,10 @@ exports.index = function(req, res) {
 };
 
 // Display list of all books.
-exports.book_list = function(req, res) {
+exports.book_list = function (req, res) {
   Book.find({}, 'title author')
     .populate('author')
-    .exec(function(err, list_books) {
+    .exec(function (err, list_books) {
       if (err) {
         return next(err);
       }
@@ -70,20 +70,20 @@ exports.book_list = function(req, res) {
 };
 
 // Display detail page for a specific book.
-exports.book_detail = function(req, res) {
+exports.book_detail = function (req, res) {
   async.parallel({
-    book: function(callback) {
+    book: function (callback) {
       Book.findById(req.params.id)
         .populate('author')
         .populate('genre')
         .exec(callback);
     },
-    book_instance: function(callback) {
+    book_instance: function (callback) {
       BookInstance.find({
         'book': req.params.id
       }).exec(callback);
     }
-  }, function(err, results) {
+  }, function (err, results) {
     if (err) {
       return next(err);
     }
@@ -102,16 +102,16 @@ exports.book_detail = function(req, res) {
 };
 
 // Display book create form on GET.
-exports.book_create_get = function(req, res, next) {
+exports.book_create_get = function (req, res, next) {
   // get all authors and genres that we can add to a book
   async.parallel({
-    authors: function(callback) {
+    authors: function (callback) {
       Author.find(callback);
     },
-    genres: function(callback) {
+    genres: function (callback) {
       Genre.find(callback);
     }
-  }, function(err, results) {
+  }, function (err, results) {
     if (err) {
       return next(err);
     }
@@ -174,13 +174,13 @@ exports.book_create_post = [
       // / If there are errors. render form again with santized
       // values/error messages get all authors and genres from the form
       async.parallel({
-        authors: function(callback) {
+        authors: function (callback) {
           Author.find(callback);
         },
-        genres: function(callback) {
+        genres: function (callback) {
           Genre.find(callback);
         }
-      }, function(err, results) {
+      }, function (err, results) {
         // / / mark our selected genres as checked
         for (let dropdownIndex = 0; dropdownIndex < results.genres.length; dropdownIndex++) {
           if (bood.genre.indexOf(results.genres[dropdownIndex]._id) > -1) {
@@ -197,7 +197,7 @@ exports.book_create_post = [
       });
     } else {
       // / / data from form is valid, save book
-      book.save(function(err) {
+      book.save(function (err) {
         if (err) {
           return next(err);
         }
@@ -210,32 +210,32 @@ exports.book_create_post = [
 
 
 // Display book delete form on GET.
-exports.book_delete_get = function(req, res) {
+exports.book_delete_get = function (req, res) {
   res.send('NOT IMPLEMENTED: Book delete GET');
 };
 
 
 // Handle book delete on POST.
-exports.book_delete_post = function(req, res) {
+exports.book_delete_post = function (req, res) {
   res.send('NOT IMPLEMENTED: Book delete POST');
 };
 
 
 // Display book update form on GET.
-exports.book_update_get = function(req, res, next) {
+exports.book_update_get = function (req, res, next) {
 
   // Get book, authors and genres for form.
   async.parallel({
-    book: function(callback) {
+    book: function (callback) {
       Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
     },
-    authors: function(callback) {
+    authors: function (callback) {
       Author.find(callback);
     },
-    genres: function(callback) {
+    genres: function (callback) {
       Genre.find(callback);
     },
-  }, function(err, results) {
+  }, function (err, results) {
     if (err) {
       return next(err);
     }
@@ -246,10 +246,10 @@ exports.book_update_get = function(req, res, next) {
     }
     // Success.
     // Mark our selected genres as checked.
-    for (var all_g_iter = 0; all_g_iter < results.genres.length; all_g_iter++) {
+    for (var genres_iterator = 0; genres_iterator < results.genres.length; genres_iterator++) {
       for (var book_g_iter = 0; book_g_iter < results.book.genre.length; book_g_iter++) {
-        if (results.genres[all_g_iter]._id.toString() == results.book.genre[book_g_iter]._id.toString()) {
-          results.genres[all_g_iter].checked = 'true';
+        if (results.genres[genres_iterator]._id.toString() == results.book.genre[book_g_iter]._id.toString()) {
+          results.genres[genres_iterator].checked = 'true';
         }
       }
     }
@@ -319,21 +319,21 @@ exports.book_update_post = [
 
       // Get all authors and genres for form.
       async.parallel({
-        authors: function(callback) {
+        authors: function (callback) {
           Author.find(callback);
         },
-        genres: function(callback) {
+        genres: function (callback) {
           Genre.find(callback);
         },
-      }, function(err, results) {
+      }, function (err, results) {
         if (err) {
           return next(err);
         }
 
         // Mark our selected genres as checked.
-        for (let i = 0; i < results.genres.length; i++) {
-          if (book.genre.indexOf(results.genres[i]._id) > -1) {
-            results.genres[i].checked = 'true';
+        for (let genresIndex = 0; genresIndex < results.genres.length; genresIndex++) {
+          if (book.genre.indexOf(results.genres[genresIndex]._id) > -1) {
+            results.genres[genresIndex].checked = 'true';
           }
         }
         res.render('book_form', {
@@ -347,7 +347,7 @@ exports.book_update_post = [
       return;
     } else {
       // Data from form is valid. Update the record.
-      Book.findByIdAndUpdate(req.params.id, book, {}, function(err, thebook) {
+      Book.findByIdAndUpdate(req.params.id, book, {}, function (err, thebook) {
         if (err) {
           return next(err);
         }

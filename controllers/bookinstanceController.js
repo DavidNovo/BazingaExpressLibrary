@@ -1,14 +1,14 @@
-var BookInstance = require('../models/bookinstance');
+let BookInstance = require('../models/bookinstance');
 
 // defining the database models that are referenced by this controller
-var Book = require('../models/book');
+let Book = require('../models/book');
 
 // import validation and sanitisation methods
 const {body, validationResult} = require('express-validator/check');
 const {sanitizeBody} = require('express-validator/filter');
 
 // Display list of all BookInstances.
-exports.bookinstance_list = function (req, res) {
+exports.bookinstance_list = function (req, res, next) {
   BookInstance.find().populate('book').exec(function (err, list_bookinstances) {
     if (err) { return next(err); }
     // Successful, so render
@@ -39,7 +39,7 @@ exports.bookinstance_detail = function (req, res) {
 exports.bookinstance_create_get = function (req, res, next) {
   Book.find({}, 'title').exec(function (err, books) {
     if (err) { return next(err); }
-    //successful, so to view
+    // successful, so to view
     res.render('bookinstance_form',
       {title: 'create BookInstance', book_list: books});
   });
@@ -60,39 +60,41 @@ exports.bookinstance_create_post = [
 
   // process the request after valication and sanitization
   (req, res, next) => {
-    //// extract the validation errors from the request
+    //  extract the validation errors from the request
     const errors = validationResult(req);
 
-    //// create a BookInstance object with user defined data
+    //  create a BookInstance object with user defined data
     var bookInstance = new BookInstance(
       {
         book: req.body.book,
         imprint: req.body.imprint,
         status: req.body.status,
-        due_back: req.body.due_back,
+        due_back: req.body.due_back
       });
 
-    //// if data from form is valid, save the book instance and redirect
+    //   if data from form is valid, save the book instance and redirect
     if (errors.isEmpty()) {
       bookInstance.save(function (err) {
         if (err) {return next(err); }
         res.redirect(bookInstance.url);
       });
     } else {
-      //// if data from form invalid, render form again with error messages
+      //   if data from form invalid, render form again with error messages
       Book.find({}, 'title').exec(function (err, books) {
         if (err) {return next(err); }
         res.render('bookinstance_form',
           {
-            title: 'Create BookInstance', book_list: books,
-            selected_book: bookinstance.book._id, errors: errors.array(),
+            title: 'Create BookInstance', 
+            book_list: books,
+            selected_book: bookinstance.book._id, 
+            errors: errors.array(),
             bookinstance: bookinstance,
           });
       });
       return;
     }
   },
-]; //end of bookinstance_create_post
+]; // end of bookinstance_create_post
 
 // Display BookInstance delete form on GET.
 exports.bookinstance_delete_get = function (req, res) {

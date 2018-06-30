@@ -21,7 +21,7 @@ var mongoDB = 'mongodb://librarian:l1brar1an@ds117590.mlab.com:17590/local_libra
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
-db.on('error', console.error.bind(console , 'MongoDB connection error'));
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
 
 // view engine setup and add to application object
@@ -32,7 +32,9 @@ app.set('view engine', 'pug')
 // add logger to application object
 app.use(logger('dev'))
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({
+  extended: false
+}))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 

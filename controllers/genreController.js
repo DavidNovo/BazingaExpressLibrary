@@ -1,12 +1,12 @@
 const {body, validationResult} = require('express-validator/check');
 const {sanitizeBody} = require('express-validator/filter');
 
-var Genre = require('../models/genre');
-var Book = require('../models/book');
-var async = require('async');
+let Genre = require('../models/genre');
+let Book = require('../models/book');
+let async = require('async');
 
 // Display list of all Genre.
-exports.genre_list = function (req, res) {
+exports.genre_list = function (req, res, next) {
   Genre.find().sort([['name', 'ascending']]).exec(function (err, list_genre) {
     if (err) {
       return next(err);
@@ -27,7 +27,7 @@ exports.genre_detail = function (req, res) {
       Book.find({'genre': req.params.id}).exec(callback);
     },
 
-  }, function (err, results) {
+  }, function (err, results, next) {
     if (err) {
       return next(err);
     }
@@ -51,7 +51,7 @@ exports.genre_create_get = function (req, res) {
 };
 
 // Handle Genre create on POST.
-// Making an array of function in a function - each method is called in order
+// Making an array of functions in a function - each function is called in order
 exports.genre_create_post = [
   // 1st function Validate that the name field is not empty.
   body('name', 'Genre name required').isLength({min: 1}).trim(),
