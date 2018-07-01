@@ -62,3 +62,4 @@ typings/
 
 # removing IntelliJ dependent files
 .idea
+\.vscode/
