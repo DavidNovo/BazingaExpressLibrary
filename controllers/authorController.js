@@ -204,7 +204,7 @@ exports.author_delete_post = function (req, res, next) {
       });
     }
   }); // end parallel processing
-};
+}; // end author_delete_post
 
 // Display Author update form on GET.
 exports.author_update_get = function (req, res) {
