@@ -1,39 +1,48 @@
 {
-    "name": "bazingaexpresslibrary",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "start": "node ./bin/www",
-        "devstart": "nodemon ./bin/www"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/DavidNovo/BazingaExpressLibrary.git"
-    },
-    "keywords": [
-        "Node.js",
-        "JavaScript"
-    ],
-    "author": "David Novogrodsky",
-    "license": "MIT",
-    "dependencies": {
-        "async": "^2.6.1",
-        "bootstrap": "^4.1.1",
-        "cookie-parser": "~1.4.3",
-        "debug": "~2.6.9",
-        "express": "~4.16.0",
-        "http-errors": "~1.6.2",
-        "jquery": "^3.3.1",
-        "moment": "^2.22.1",
-        "mongoose": "^5.1.2",
-        "morgan": "~1.9.0",
-        "popper.js": "^1.14.3",
-        "pug": "2.0.0-beta11",
-        "save": "^2.3.2"
-    },
-    "devDependencies": {
-        "eslint-config-google": "^0.9.1",
-        "nodemon": "^1.17.5",
-        "standard": "^11.0.1"
-    }
+  "name": "bazingaexpresslibrary",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidNovo/BazingaExpressLibrary.git"
+  },
+  "keywords": [
+    "Node.js",
+    "JavaScript"
+  ],
+  "author": "David Novogrodsky",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.6.1",
+    "bootstrap": "^4.1.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "express-validator": "^5.2.0",
+    "http-errors": "~1.6.2",
+    "jquery": "^3.3.1",
+    "moment": "^2.22.2",
+    "mongoose": "^5.1.5",
+    "morgan": "~1.9.0",
+    "popper.js": "^1.14.3",
+    "pug": "2.0.0-beta11",
+    "save": "^2.3.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-react": "^7.9.1",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.5",
+    "semistandard": "^12.0.1",
+    "standard": "^11.0.1"
+  }
 }

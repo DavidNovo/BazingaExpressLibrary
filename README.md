@@ -18,6 +18,9 @@ Note, when scripts other than 'start' are created running them means we have
 to call "npm run <scriptname>", not just "npm <scriptname>" because "start"
 is an NPM command mapped to the named script. 
 
+To test the project:
+`$ npm test`
+
 ## Design Considerations
 What do I want to get from the catalog and when?  What about security?
 ### Get information about the library, get meta information about the orginazation

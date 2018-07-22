@@ -1,6 +1,6 @@
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema
+var Schema = mongoose.Schema;
 
 var BookSchema = new Schema(
   {
@@ -10,16 +10,16 @@ var BookSchema = new Schema(
     isbn: {type: String, required: true},
     genre: [{type: Schema.ObjectId, ref: 'Genre'}]
   }
-)
+);
 
 // Virtual for book's URL
 // This makes a function associated with a book instance
 // Called like this Book.url
 BookSchema
-.virtual('url')
-.get(function () {
-  return '/catalog/book/' + this._id
-})
+  .virtual('url')
+  .get(function () {
+    return '/catalog/book/' + this._id;
+  });
 
-//Export model
-module.exports = mongoose.model('Book', BookSchema)
+// Export model
+module.exports = mongoose.model('Book', BookSchema);
