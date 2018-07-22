@@ -3,6 +3,8 @@ let BookInstance = require('../models/bookinstance');
 // defining the database models that are referenced by this controller
 let Book = require('../models/book');
 
+const async = require('async');
+
 // import validation and sanitisation methods
 const {
   body,
@@ -118,14 +120,28 @@ exports.bookinstance_create_post = [
 ]; // end of bookinstance_create_post
 
 // Display BookInstance delete form on GET.
-exports.bookinstance_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: BookInstance delete GET');
+exports.bookinstance_delete_get = function (req, res, next) {
+  BookInstance.findById(req.params.id)
+    .populate('book') // this populates the associated book to this instance
+    .exec(function (err, bookinstance) {
+      if (err) { return next(err); }
+      if (bookinstance == null) {
+        res.redirect('/catalog/bookinstances');
+      }
+      // successful, render form
+      res.render('bookinstance_delete', {
+        title: 'Delete Book Instance', bookinstance: bookinstance});
+    });
 };
 
 // Handle BookInstance delete on POST.
 exports.bookinstance_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: BookInstance delete POST');
-};
+  BookInstance.findByIdAndRemove(req.body.id, function deleteBookInstance (err) {
+    if (err) { return next(err); }
+    // Success - go to genres list.
+    res.redirect('/catalog/bookinstances');
+  });
+}; // end bookinstance_delete_post
 
 // Display BookInstance update form on GET.
 exports.bookinstance_update_get = function (req, res) {
