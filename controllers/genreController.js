@@ -171,7 +171,7 @@ exports.genre_delete_post = function (req, res, next) {
       });
     } else {
       // Genre has no books. Delete object and redirect to the list of genres.
-      Genre.findByIdAndRemove(req.body.id, function deleteGenre(err) {
+      Genre.findByIdAndRemove(req.body.id, function deleteGenre (err) {
         if (err) {
           return next(err);
         }
@@ -184,7 +184,6 @@ exports.genre_delete_post = function (req, res, next) {
 
 // Display Genre update form on GET.
 exports.genre_update_get = function (req, res, next) {
-  // check if author has books
   async.parallel({
     genre: function (callback) {
       Genre.findById(req.body.genreid).exec(callback);
@@ -198,24 +197,18 @@ exports.genre_update_get = function (req, res, next) {
     if (err) {
       return next(err);
     }
-    if (results.genre_books.length > 0) {
-      // genre has books, redirect to genre_delete page and
-      // ask to delete books first
-      res.render('genre_delete', {
-        title: 'Delete Genre',
-        genre: results.genre,
-        genre_books: results.genre_books
-      });
+    if (results.genre == null) {
+      // genre not found
+      var err = new Error('Genre not found');
+      err.status = 404;
+      return next(err);
     } else {
-      // author has no books, delete author
-      Genre.findByIdAndRemove(req.body.genreid, function deleteGenre(err) {
-        if (err) {
-          return next(err);
-        }
-        // remember without the leading '/' the path is appended to current URL
-        res.redirect('/catalog/genres');
+      // found genre
+      res.render('genre_form', {
+        title: 'Update Genre',
+        genre: results.genre
       });
-    }
+    } // found genre
   }); // end parallel processing
 };
 
