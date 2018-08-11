@@ -14,14 +14,14 @@ let async = require('async');
 exports.genre_list = function (req, res, next) {
   Genre.find().sort([
     ['name', 'ascending']
-  ]).exec(function (err, list_genre) {
+  ]).exec(function (err, listGenre) {
     if (err) {
       return next(err);
     }
     // Successful, so render
     res.render('genre_list', {
       title: 'Genre List',
-      genre_list: list_genre
+      genre_list: listGenre
     });
   });
 };

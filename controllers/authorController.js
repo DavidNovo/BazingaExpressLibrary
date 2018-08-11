@@ -27,14 +27,14 @@ exports.author_list = function (req, res, next) {
     .sort([
       ['family_name', 'ascending']
     ])
-    .exec(function (err, list_authors) {
+    .exec(function (err, listAuthors) {
       if (err) {
         return next(err);
       }
       // Successful, so render
       res.render('author_list', {
         title: 'Author List',
-        author_list: list_authors
+        author_list: listAuthors
       });
     });
 };
@@ -110,13 +110,13 @@ exports.author_create_post = [
   // Process request after validation and sanitization
   (req, res, next) => {
     // extract and check there are no validation errors
-    const validation_errors = validationResult(req);
-    if (!validation_errors.isEmpty()) {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
       // there are errors so render form again with errors messages
       res.render('author_form', {
         title: 'Create Author',
         author: req.body,
-        errors: validation_errors.array()
+        errors: validationErrors.array()
       });
     } else {
       // data from form is valid
