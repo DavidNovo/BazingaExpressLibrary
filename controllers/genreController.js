@@ -186,7 +186,7 @@ exports.genre_delete_post = function (req, res, next) {
 exports.genre_update_get = function (req, res, next) {
   async.parallel({
     genre: function (callback) {
-      Genre.findById(req.body.genreid).exec(callback);
+      Genre.findById(req.params.id).exec(callback);
     },
     genre_books: function (callback) {
       Book.find({
