@@ -261,7 +261,7 @@ exports.book_delete_post = function (req, res) {
     } else {
       // This Book has no associated Book Instances
       // Delete Book and redirect to the list of books.
-      Book.findByIdAndRemove(req.body.id, function deleteBook(err) {
+      Book.findByIdAndRemove(req.body.id, function deleteBook (err) {
         if (err) {
           return next(err);
         }
@@ -350,7 +350,6 @@ exports.book_update_post = [
 
   // Process request after validation and sanitization.
   (req, res, next) => {
-
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -374,7 +373,7 @@ exports.book_update_post = [
         },
         genres: function (callback) {
           Genre.find(callback);
-        },
+        }
       }, function (err, results) {
         if (err) {
           return next(err);
@@ -394,7 +393,6 @@ exports.book_update_post = [
           errors: errors.array()
         });
       });
-
     } else {
       // Data from form is valid. Update the record.
       Book.findByIdAndUpdate(req.params.id, book, {}, function (err, thebook) {
