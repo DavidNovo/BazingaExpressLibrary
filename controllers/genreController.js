@@ -14,14 +14,14 @@ let async = require('async');
 exports.genre_list = function (req, res, next) {
   Genre.find().sort([
     ['name', 'ascending']
-  ]).exec(function (err, list_genre) {
+  ]).exec(function (err, listGenre) {
     if (err) {
       return next(err);
     }
     // Successful, so render
     res.render('genre_list', {
       title: 'Genre List',
-      genre_list: list_genre
+      genre_list: listGenre
     });
   });
 };
@@ -44,7 +44,7 @@ exports.genre_detail = function (req, res) {
       return next(err);
     }
     if (results.genre == null) { // No results.
-      var err = new Error('Genre not found');
+      err = new Error('Genre not found');
       err.status = 404;
       return next(err);
     }

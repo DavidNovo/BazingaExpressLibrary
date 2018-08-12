@@ -56,5 +56,19 @@ AuthorSchema
     return birth + death;
   });
 
+// This returns a Date type for the author_form page
+AuthorSchema
+  .virtual('date_of_birth_yyyy_mm_dd')
+  .get(function () {
+    return moment(this.date_of_birth).format('YYYY-MM-DD');
+  });
+
+// This returns a Date type for the author_form page
+AuthorSchema
+  .virtual('date_of_death_yyyy_mm_dd')
+  .get(function () {
+    return moment(this.date_of_death).format('YYYY-MM-DD');
+  });
+
 // Export model
 module.exports = mongoose.model('Author', AuthorSchema);
