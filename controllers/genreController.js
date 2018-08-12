@@ -97,14 +97,14 @@ exports.genre_create_post = [
       // Check if Genre with same name already exists.
       Genre.findOne({
         'name': req.body.name
-      }).exec(function (err, found_genre) {
+      }).exec(function (err, foundGenre) {
         if (err) {
           return next(err);
         }
 
-        if (found_genre) {
+        if (foundGenre) {
           // Genre exists, redirect to its detail page.
-          res.redirect(found_genre.url);
+          res.redirect(foundGenre.url);
         } else {
           genre.save(function (err) {
             if (err) {
