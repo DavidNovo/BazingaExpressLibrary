@@ -52,7 +52,7 @@ exports.author_detail = function (req, res) {
       }, 'title summary')
         .exec(callback);
     }
-  }, function (err, results, next) {
+  }, function (err, results) {
     if (err) {
       return next(err);
     } // Error in API usage.
