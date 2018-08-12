@@ -2,7 +2,6 @@ extends layout
 
 block content
     h1=title
-
     form(method='POST' action="")
         div.form-group
             label(for='first_name') First Name:
@@ -19,15 +18,15 @@ block content
             label(for='date_of_birth') Date of birth:
             input#date_of_birth.form-control(type='date' placeholder='dd/mm/yyyy'
                 name='date_of_birth'
-                value=(undefined === author
-                ? '' : author.date_of_birth) )
-
+                value=(undefined===author
+                ? '' : author.date_of_birth_yyyy_mm_dd) )
+        
         div.form-group
             label(for='date_of_death') Date of death:
-            input#date_of_birth.form-control(type='date' placeholder='dd/mm/yyyy'
+            input#date_of_death.form-control(type='date' placeholder='dd/mm/yyyy'
             name='date_of_death' required='false'
             value=(undefined === author
-              ? '' : author.date_of_death) )
+              ? '' : author.date_of_death_yyyy_mm_dd) )
 
         button.btn.btn-primary(type='submit') Submit
         if errors
